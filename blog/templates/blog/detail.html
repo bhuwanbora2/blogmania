@@ -1,0 +1,153 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block title %}{{ post.title }} - My Blog{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-4">
+    <div class="row">
+        <div class="col-lg-8">
+            <article class="blog-detail">
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'blog:home' %}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'blog:category' post.category.slug %}">{{ post.category.name }}</a></li>
+                        <li class="breadcrumb-item active">{{ post.title|truncatewords:5 }}</li>
+                    </ol>
+                </nav>
+
+                <!-- Featured Image -->
+                {% if post.featured_image %}
+                <div class="featured-image-wrapper mb-4">
+                    <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="img-fluid rounded shadow">
+                </div>
+                {% endif %}
+
+                <!-- Post Header -->
+                <header class="post-header mb-4">
+                    <span class="badge bg-primary mb-2">{{ post.category.name }}</span>
+                    <h1 class="post-title">{{ post.title }}</h1>
+                    <div class="post-meta d-flex flex-wrap align-items-center gap-3">
+                        <div>
+                            <i class="far fa-user me-1"></i>
+                            <strong>{{ post.author.username }}</strong>
+                        </div>
+                        <div>
+                            <i class="far fa-calendar me-1"></i>
+                            {{ post.published_at|date:"F d, Y" }}
+                        </div>
+                        <div>
+                            <i class="far fa-eye me-1"></i>
+                            {{ post.views }} views
+                        </div>
+                        <div>
+                            <i class="far fa-clock me-1"></i>
+                            {{ post.get_time_since_published }}
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Post Content -->
+                <div class="post-content">
+                    {{ post.content|linebreaks }}
+                </div>
+
+                <!-- Post Footer -->
+                <footer class="post-footer mt-5 pt-4 border-top">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="text-muted">Category: </span>
+                            <a href="{% url 'blog:category' post.category.slug %}" class="badge bg-secondary">{{ post.category.name }}</a>
+                        </div>
+                        {% if user == post.author %}
+                        <div>
+                            <a href="{% url 'blog:update' post.slug %}" class="btn btn-sm btn-outline-warning">
+                                <i class="fas fa-edit me-1"></i>Edit
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </footer>
+            </article>
+
+            <!-- Related Posts -->
+            {% if related_posts %}
+            <div class="related-posts mt-5">
+                <h3 class="mb-4">
+                    <i class="fas fa-th-list me-2"></i>Related Posts
+                </h3>
+                <div class="row g-4">
+                    {% for related_post in related_posts %}
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm h-100">
+                            {% if related_post.featured_image %}
+                            <img src="{{ related_post.featured_image.url }}" class="card-img-top" alt="{{ related_post.title }}" style="height: 200px; object-fit: cover;">
+                            {% endif %}
+                            <div class="card-body">
+                                <span class="badge bg-secondary mb-2">{{ related_post.category.name }}</span>
+                                <h5 class="card-title">{{ related_post.title|truncatewords:8 }}</h5>
+                                <p class="card-text text-muted small">{{ related_post.excerpt|default:related_post.content|truncatewords:12 }}</p>
+                                <a href="{% url 'blog:detail' related_post.slug %}" class="btn btn-sm btn-primary">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="position-sticky" style="top: 100px;">
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-info-circle me-2"></i>About This Post
+                        </h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="far fa-user me-2"></i>
+                                <strong>Author:</strong> {{ post.author.username }}
+                            </li>
+                            <li class="mb-2">
+                                <i class="far fa-calendar me-2"></i>
+                                <strong>Published:</strong> {{ post.published_at|date:"F d, Y" }}
+                            </li>
+                            <li class="mb-2">
+                                <i class="far fa-eye me-2"></i>
+                                <strong>Views:</strong> {{ post.views }}
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-tag me-2"></i>
+                                <strong>Category:</strong> 
+                                <a href="{% url 'blog:category' post.category.slug %}">{{ post.category.name }}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-list me-2"></i>Categories
+                        </h5>
+                        <ul class="list-unstyled">
+                            {% if categories %}
+                                {% for category in categories %}
+                                <li class="mb-2">
+                                    <a href="{% url 'blog:category' category.slug %}" class="text-decoration-none">
+                                        <i class="fas fa-chevron-right me-2"></i>{{ category.name }}
+                                    </a>
+                                </li>
+                                {% endfor %}
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

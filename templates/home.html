@@ -1,0 +1,143 @@
+{%load static %}
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="auto">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>My Blog</title>
+
+  <!-- Bootstrap CSS (CDN - Works Locally) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900&display=swap" rel="stylesheet">
+  <link href="{%static 'css/blog.css'}"rel="stylesheet">
+
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <header class="border-bottom lh-1 py-3 mb-4">
+    <div class="row flex-nowrap justify-content-between align-items-center">
+      <div class="col-4 pt-1">
+        <a class="link-secondary" href="#">Subscribe</a>
+      </div>
+      <div class="col-4 text-center">
+        <a class="blog-header-logo text-decoration-none fw-bold" href="#">My Blog</a>
+      </div>
+      <div class="col-4 d-flex justify-content-end align-items-center">
+        <a class="btn btn-sm btn-outline-secondary" href="#">Sign up</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Nav -->
+  <div class="nav-scroller py-1 mb-4 border-bottom">
+    <nav class="nav nav-underline justify-content-between">
+      <a class="nav-link active" href="#">Home</a>
+      <a class="nav-link" href="#">Technology</a>
+      <a class="nav-link" href="#">Design</a>
+      <a class="nav-link" href="#">AI</a>
+      <a class="nav-link" href="#">Python</a>
+    </nav>
+  </div>
+
+  <!-- Featured -->
+  <div class="p-4 p-md-5 mb-4 rounded text-bg-secondary">
+    <div class="col-lg-6 px-0">
+      <h1 class="display-4 fst-italic">Featured Blog Post</h1>
+      <p class="lead my-3">
+        This is a featured post description. You can describe your latest blog here.
+      </p>
+      <p class="lead mb-0">
+        <a href="#" class="text-white fw-bold">Continue reading...</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Blog Cards -->
+  <div class="row mb-2">
+
+    <div class="col-md-6">
+      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250">
+        <div class="col p-4 d-flex flex-column">
+          <strong class="d-inline-block mb-2 text-primary">Technology</strong>
+          <h3 class="mb-0">First Blog Post</h3>
+          <div class="mb-1 text-muted">Feb 2026</div>
+          <p class="card-text mb-auto">This is a short description of the blog post.</p>
+          <a href="#" class="stretched-link">Continue reading</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250">
+        <div class="col p-4 d-flex flex-column">
+          <strong class="d-inline-block mb-2 text-success">AI</strong>
+          <h3 class="mb-0">Second Blog Post</h3>
+          <div class="mb-1 text-muted">Feb 2026</div>
+          <p class="mb-auto">This is another blog description.</p>
+          <a href="#" class="stretched-link">Continue reading</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Main Content -->
+  <div class="row g-5">
+    <div class="col-md-8">
+      <h3 class="pb-4 mb-4 fst-italic border-bottom">
+        Latest Posts
+      </h3>
+
+      <article class="blog-post">
+        <h2 class="display-6">Sample Blog Post</h2>
+        <p class="text-muted">Feb 13, 2026 by Bhuwan</p>
+        <p>This is your blog content. You can write your article here.</p>
+      </article>
+
+      <nav class="blog-pagination mt-4">
+        <a class="btn btn-outline-primary rounded-pill" href="#">Older</a>
+        <a class="btn btn-outline-secondary rounded-pill disabled">Newer</a>
+      </nav>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="col-md-4">
+      <div class="position-sticky" style="top: 2rem;">
+
+        <div class="p-4 mb-3 bg-light rounded">
+          <h4>About</h4>
+          <p>This is my personal blog where I write about Python, Django, AI & ML.</p>
+        </div>
+
+        <div class="p-4">
+          <h4>Recent Posts</h4>
+          <ul class="list-unstyled">
+            <li><a href="#">How I Built My Blog with Django</a></li>
+            <li><a href="#">AI Chatbot with n8n</a></li>
+            <li><a href="#">YOLOv8 Object Detection</a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<footer class="py-5 text-center text-muted">
+  <p>My Blog © 2026</p>
+  <p><a href="#">Back to top</a></p>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

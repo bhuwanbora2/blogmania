@@ -1,0 +1,273 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block title %}Home - My Blog{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-4">
+    <!-- Dashboard Access Section -->
+    {% if user.is_authenticated %}
+    <div class="dashboard-access-card card border-0 shadow-lg mb-5 bg-gradient-primary text-white">
+        <div class="card-body p-4">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h3 class="mb-2">
+                        <i class="fas fa-tachometer-alt me-2"></i>Welcome to Your Dashboard
+                    </h3>
+                    <p class="mb-0">Manage your blog posts, view statistics, and access admin features all in one place.</p>
+                </div>
+                <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                    <a href="{% url 'blog:dashboard' %}" class="btn btn-light btn-lg">
+                        <i class="fas fa-arrow-right me-2"></i>Go to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="dashboard-access-card card border-0 shadow-sm mb-5">
+        <div class="card-body p-4">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h4 class="mb-2">
+                        <i class="fas fa-user-circle me-2 text-primary"></i>Want to Manage Your Blog?
+                    </h4>
+                    <p class="mb-0 text-muted">Log in to access your dashboard and start creating amazing blog posts.</p>
+                </div>
+                <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                    <a href="/admin/login/" class="btn btn-primary btn-lg">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Quick Actions for Authenticated Users -->
+    {% if user.is_authenticated %}
+    <div class="row g-3 mb-5">
+        <div class="col-md-3">
+            <a href="{% url 'blog:create' %}" class="card quick-action-home text-decoration-none border-0 shadow-sm h-100">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-plus-circle fa-3x text-primary mb-3"></i>
+                    <h5 class="mb-1">Create Post</h5>
+                    <p class="text-muted small mb-0">Write a new blog post</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="{% url 'blog:dashboard' %}" class="card quick-action-home text-decoration-none border-0 shadow-sm h-100">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-tachometer-alt fa-3x text-info mb-3"></i>
+                    <h5 class="mb-1">Dashboard</h5>
+                    <p class="text-muted small mb-0">Manage your posts</p>
+                </div>
+            </a>
+        </div>
+        {% if user.is_staff %}
+        <div class="col-md-3">
+            <a href="/admin/blog/category/" class="card quick-action-home text-decoration-none border-0 shadow-sm h-100" target="_blank">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-tags fa-3x text-success mb-3"></i>
+                    <h5 class="mb-1">Categories</h5>
+                    <p class="text-muted small mb-0">Manage categories</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="/admin/" class="card quick-action-home text-decoration-none border-0 shadow-sm h-100" target="_blank">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-cog fa-3x text-dark mb-3"></i>
+                    <h5 class="mb-1">Admin Panel</h5>
+                    <p class="text-muted small mb-0">Full admin access</p>
+                </div>
+            </a>
+        </div>
+        {% else %}
+        <div class="col-md-3">
+            <a href="{% url 'blog:dashboard' %}" class="card quick-action-home text-decoration-none border-0 shadow-sm h-100">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-chart-bar fa-3x text-warning mb-3"></i>
+                    <h5 class="mb-1">Statistics</h5>
+                    <p class="text-muted small mb-0">View your stats</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="{% url 'blog:dashboard' %}" class="card quick-action-home text-decoration-none border-0 shadow-sm h-100">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-list fa-3x text-secondary mb-3"></i>
+                    <h5 class="mb-1">My Posts</h5>
+                    <p class="text-muted small mb-0">View all posts</p>
+                </div>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Featured Posts Section -->
+    {% if featured_posts %}
+    <div class="featured-section mb-5">
+        <div class="row g-4">
+            {% for post in featured_posts %}
+            <div class="col-md-4">
+                <div class="featured-card card h-100 shadow-lg border-0">
+                    {% if post.featured_image %}
+                    <img src="{{ post.featured_image.url }}" class="card-img-top featured-img" alt="{{ post.title }}">
+                    {% else %}
+                    <div class="card-img-top featured-img bg-gradient-primary d-flex align-items-center justify-content-center">
+                        <i class="fas fa-image fa-3x text-white opacity-50"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <span class="badge bg-primary mb-2">{{ post.category.name }}</span>
+                        <h5 class="card-title">{{ post.title|truncatewords:8 }}</h5>
+                        <p class="card-text text-muted flex-grow-1">{{ post.excerpt|default:post.content|truncatewords:15 }}</p>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <small class="text-muted">
+                                <i class="far fa-clock me-1"></i>{{ post.get_time_since_published }}
+                            </small>
+                            <a href="{% url 'blog:detail' post.slug %}" class="btn btn-sm btn-primary">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Category Sections -->
+    {% for category, posts in posts_by_category.items %}
+    <div class="category-section mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="section-title">
+                <i class="fas fa-tag me-2"></i>{{ category.name }}
+            </h2>
+            <a href="{% url 'blog:category' category.slug %}" class="btn btn-outline-primary btn-sm">
+                View All <i class="fas fa-arrow-right ms-1"></i>
+            </a>
+        </div>
+        <div class="row g-4">
+            {% for post in posts %}
+            <div class="col-md-4">
+                <div class="blog-card card h-100 shadow-sm border-0">
+                    {% if post.featured_image %}
+                    <img src="{{ post.featured_image.url }}" class="card-img-top blog-img" alt="{{ post.title }}">
+                    {% else %}
+                    <div class="card-img-top blog-img bg-gradient-secondary d-flex align-items-center justify-content-center">
+                        <i class="fas fa-newspaper fa-2x text-white opacity-50"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <span class="badge bg-secondary mb-2">{{ category.name }}</span>
+                        <h5 class="card-title">{{ post.title|truncatewords:6 }}</h5>
+                        <p class="card-text text-muted small">{{ post.excerpt|default:post.content|truncatewords:12 }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="far fa-user me-1"></i>{{ post.author.username }}
+                                <i class="far fa-eye ms-2 me-1"></i>{{ post.views }}
+                            </small>
+                            <a href="{% url 'blog:detail' post.slug %}" class="stretched-link"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+
+    <!-- Latest Posts Section -->
+    {% if latest_posts %}
+    <div class="latest-section mb-5">
+        <h2 class="section-title mb-4">
+            <i class="fas fa-fire me-2"></i>Latest Posts
+        </h2>
+        <div class="row g-4">
+            {% for post in latest_posts %}
+            <div class="col-md-6 col-lg-4">
+                <article class="latest-card card h-100 shadow-sm border-0">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <span class="badge bg-info">{{ post.category.name }}</span>
+                            <small class="text-muted">{{ post.get_time_since_published }}</small>
+                        </div>
+                        <h5 class="card-title">{{ post.title|truncatewords:8 }}</h5>
+                        <p class="card-text text-muted">{{ post.excerpt|default:post.content|truncatewords:15 }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="far fa-user me-1"></i>{{ post.author.username }}
+                            </small>
+                            <a href="{% url 'blog:detail' post.slug %}" class="btn btn-sm btn-outline-primary">Read</a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Empty State -->
+    {% if not featured_posts and not posts_by_category %}
+    <div class="empty-state text-center py-5">
+        <i class="fas fa-blog fa-4x text-muted mb-3"></i>
+        <h3 class="text-muted">No blog posts yet</h3>
+        <p class="text-muted">Start writing your first blog post!</p>
+        {% if user.is_authenticated %}
+        <div class="mt-4">
+            <a href="{% url 'blog:create' %}" class="btn btn-primary btn-lg me-2">
+                <i class="fas fa-plus me-2"></i>Create Your First Post
+            </a>
+            <a href="{% url 'blog:dashboard' %}" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+            </a>
+        </div>
+        {% else %}
+        <a href="/admin/login/" class="btn btn-primary btn-lg mt-3">
+            <i class="fas fa-sign-in-alt me-2"></i>Login to Get Started
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.dashboard-access-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.dashboard-access-card .card-body {
+    background: transparent;
+}
+
+.quick-action-home {
+    transition: all 0.3s ease;
+    border-radius: 12px;
+}
+
+.quick-action-home:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15) !important;
+}
+
+.quick-action-home:hover i {
+    transform: scale(1.15);
+    transition: transform 0.3s ease;
+}
+
+.quick-action-home h5 {
+    color: #333;
+    font-weight: 600;
+}
+
+.quick-action-home:hover h5 {
+    color: #0d6efd;
+}
+</style>
+{% endblock %}
